@@ -113,6 +113,10 @@ const app = express__WEBPACK_IMPORTED_MODULE_0___default()();
 const {
   PORT
 } = process.env;
+app.use(express__WEBPACK_IMPORTED_MODULE_0___default.a.json());
+app.use(express__WEBPACK_IMPORTED_MODULE_0___default.a.urlencoded({
+  extended: false
+}));
 app.use("/users", _routes_user__WEBPACK_IMPORTED_MODULE_2__["default"]);
 app.listen(PORT, () => {
   console.log("ciao");
@@ -204,8 +208,8 @@ UserRouter.get('/:id', (req, res) => {
   res.json(users[req.params.id]);
 });
 UserRouter.post('/', (req, res) => {
-  //		users.push({	"username": "mathieu", "password": "old"});
-  res.json(users[-1]);
+  users.push(req.body);
+  res.json(users[users.length - 1]);
   /* let user = new User({username: "mathieu", password: "old"})
   user.save()
   .then(result  => {
@@ -216,13 +220,12 @@ UserRouter.post('/', (req, res) => {
   }) */
 });
 UserRouter.put('/:id', (req, res) => {
-  users[req.params.id] = {
-    "username": "mathieu"
-  };
-  res.send(users);
+  users[req.params.id] = req.body;
+  res.send(users[req.params.id]);
 });
 UserRouter.delete('/:id', (req, res) => {
-  res.send("delete");
+  users.splice(req.params.id, 1);
+  res.send("nothing");
 });
 /* harmony default export */ __webpack_exports__["default"] = (UserRouter);
 

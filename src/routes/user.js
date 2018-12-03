@@ -14,8 +14,8 @@ UserRouter.get('/:id', (req, res)=> {
 });
 
 UserRouter.post('/', (req, res) => {
-//		users.push({	"username": "mathieu", "password": "old"});
-		res.json(users[-1]);
+		users.push(req.body);
+		res.json(users[users.length-1]);
    /* let user = new User({username: "mathieu", password: "old"})
    user.save()
 		.then(result  => {
@@ -27,12 +27,13 @@ UserRouter.post('/', (req, res) => {
 });
 
 UserRouter.put('/:id', (req, res)=> {
-		users[req.params.id] = { "username": "mathieu" }
-    res.send(users)
+		users[req.params.id] = req.body; 
+    res.send(users[req.params.id])
 });
 
 UserRouter.delete('/:id', (req, res)=> {
-    res.send("delete")
+	users.splice(req.params.id, 1);
+  res.send("nothing")
 });
 
 export default UserRouter;
