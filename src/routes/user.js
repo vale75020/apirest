@@ -3,25 +3,32 @@ const UserRouter = express.Router();
 
 import User from '../models/user-model'
 
+const users = [{"id":1001, "username":"bruce.wayne@wayne-entreprise.com", "createdAt":"2018-01-12T23:00:00.000Z", "firstname":"Bruce", "lastname":"Wayne", "avatarUrl":"https://images.forbes.com/media/lists/fictional/2011/bruce-wayne_197x282.jpg", "address":{"city":"Gotham" } }, {"id":1002, "username":"c.k@daily-planet.com", "createdAt":"2018-30-11T23:00:00.000Z", "firstname":"Clark", "lastname":"Kent", "avatarUrl":"https://resize-parismatch.ladmedia.fr/r/,600,forcey/img/var/news/storage/images/paris-match/culture/medias/l-evolution-physique-des-stars-de-lois-et-clark-les-nouvelles-aventures-de-superman-905795/dean-cain-clark-kent-superman/9605673-1-fre-FR/Dean-Cain-Clark-Kent-Superman.jpg", "address":{"city":"Metropolis" } }, {"id":1003, "username":"barry.allen@starlabs.com", "createdAt":"2018-29-11T23:00:00.000Z", "firstname":"Barry", "lastname":"Allen", "avatarUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStBwA2efztaIA7oJsn1f9Nswj2QuHTs7feck9Jpd-d6uJ9W5yYdw", "address":{"city":"CentralCity" } } ]
+
 UserRouter.get('/', (req, res)=> {
-    res.send('coucou')
+    res.json(users);
 });
 
 UserRouter.get('/:id', (req, res)=> {
-    res.send(req.params.id)
+    res.json(users[req.params.id])
 });
 
-UserRouter.post('/', (req, res)=> {
-   const user = new User({username: "mathieu", password: "old"})
-   user.save((err, result) => {
-       if (err) res.send('erreur'+err)
+UserRouter.post('/', (req, res) => {
+//		users.push({	"username": "mathieu", "password": "old"});
+		res.json(users[-1]);
+   /* let user = new User({username: "mathieu", password: "old"})
+   user.save()
+		.then(result  => {
        res.send('valentino'+result)
    })
-    res.send(req.body)
+	.catch(err => {
+			res.send(err)
+	}) */
 });
 
 UserRouter.put('/:id', (req, res)=> {
-    res.send(req.params.id)
+		users[req.params.id] = { "username": "mathieu" }
+    res.send(users)
 });
 
 UserRouter.delete('/:id', (req, res)=> {
