@@ -108,7 +108,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var connection = mongoose__WEBPACK_IMPORTED_MODULE_3___default.a.createConnection('mongodb://localhost:27017/apirest-users');
+mongoose__WEBPACK_IMPORTED_MODULE_3___default.a.connect('mongodb://localhost:27017/apirest-users', {
+  useNewUrlParser: true
+});
 const app = express__WEBPACK_IMPORTED_MODULE_0___default()();
 const {
   PORT
@@ -119,7 +121,7 @@ app.use(express__WEBPACK_IMPORTED_MODULE_0___default.a.urlencoded({
 }));
 app.use("/users", _routes_user__WEBPACK_IMPORTED_MODULE_2__["default"]);
 app.listen(PORT, () => {
-  console.log("ciao");
+  console.log(`ciao sur le port ${PORT}`);
 });
 
 /***/ }),
@@ -169,59 +171,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _models_user_model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../models/user-model */ "./src/models/user-model.js");
 
 const UserRouter = express__WEBPACK_IMPORTED_MODULE_0___default.a.Router();
+ //const users = [{"id":1001, "username":"bruce.wayne@wayne-entreprise.com", "createdAt":"2018-01-12T23:00:00.000Z", "firstname":"Bruce", "lastname":"Wayne", "avatarUrl":"https://images.forbes.com/media/lists/fictional/2011/bruce-wayne_197x282.jpg", "address":{"city":"Gotham" } }, {"id":1002, "username":"c.k@daily-planet.com", "createdAt":"2018-30-11T23:00:00.000Z", "firstname":"Clark", "lastname":"Kent", "avatarUrl":"https://resize-parismatch.ladmedia.fr/r/,600,forcey/img/var/news/storage/images/paris-match/culture/medias/l-evolution-physique-des-stars-de-lois-et-clark-les-nouvelles-aventures-de-superman-905795/dean-cain-clark-kent-superman/9605673-1-fre-FR/Dean-Cain-Clark-Kent-Superman.jpg", "address":{"city":"Metropolis" } }, {"id":1003, "username":"barry.allen@starlabs.com", "createdAt":"2018-29-11T23:00:00.000Z", "firstname":"Barry", "lastname":"Allen", "avatarUrl":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStBwA2efztaIA7oJsn1f9Nswj2QuHTs7feck9Jpd-d6uJ9W5yYdw", "address":{"city":"CentralCity" } } ]
 
-const users = [{
-  "id": 1001,
-  "username": "bruce.wayne@wayne-entreprise.com",
-  "createdAt": "2018-01-12T23:00:00.000Z",
-  "firstname": "Bruce",
-  "lastname": "Wayne",
-  "avatarUrl": "https://images.forbes.com/media/lists/fictional/2011/bruce-wayne_197x282.jpg",
-  "address": {
-    "city": "Gotham"
-  }
-}, {
-  "id": 1002,
-  "username": "c.k@daily-planet.com",
-  "createdAt": "2018-30-11T23:00:00.000Z",
-  "firstname": "Clark",
-  "lastname": "Kent",
-  "avatarUrl": "https://resize-parismatch.ladmedia.fr/r/,600,forcey/img/var/news/storage/images/paris-match/culture/medias/l-evolution-physique-des-stars-de-lois-et-clark-les-nouvelles-aventures-de-superman-905795/dean-cain-clark-kent-superman/9605673-1-fre-FR/Dean-Cain-Clark-Kent-Superman.jpg",
-  "address": {
-    "city": "Metropolis"
-  }
-}, {
-  "id": 1003,
-  "username": "barry.allen@starlabs.com",
-  "createdAt": "2018-29-11T23:00:00.000Z",
-  "firstname": "Barry",
-  "lastname": "Allen",
-  "avatarUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStBwA2efztaIA7oJsn1f9Nswj2QuHTs7feck9Jpd-d6uJ9W5yYdw",
-  "address": {
-    "city": "CentralCity"
-  }
-}];
 UserRouter.get('/', (req, res) => {
-  res.json(users);
+  // res.json(users);
+  _models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].find({}, (err, result) => {
+    if (err) res.send(err);
+    res.send(result);
+  });
 });
 UserRouter.get('/:id', (req, res) => {
   res.json(users[req.params.id]);
 });
 UserRouter.post('/', (req, res) => {
-  users.push(req.body);
-  res.json(users[users.length - 1]);
-  /* let user = new User({username: "mathieu", password: "old"})
-  user.save()
-  .then(result  => {
-      res.send('valentino'+result)
-  })
-  .catch(err => {
-  res.send(err)
-  }) */
+  /*	users.push(req.body);
+  	res.json(users[users.length-1]); */
+  let user = new _models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"](req.body);
+  user.save().then(result => {
+    res.send(result);
+  }).catch(err => {
+    res.send(err);
+  });
 });
 UserRouter.put('/:id', (req, res) => {
-  users[req.params.id] = req.body;
-  res.send(users[req.params.id]);
+  /* users[req.params.id] = req.body; 
+  res.send(users[req.params.id]); */
+  _models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].findOneAndUpdate({
+    id: req.params.id
+  }, {
+    $set: req.body
+  }, (err, result) => {
+    if (err) console.log(err);
+  });
 });
 UserRouter.delete('/:id', (req, res) => {
   users.splice(req.params.id, 1);

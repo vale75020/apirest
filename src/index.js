@@ -3,7 +3,7 @@ import "dotenv/config"
 import UserRouter from './routes/user'
 import mongoose from 'mongoose'
 
-var connection = mongoose.createConnection('mongodb://localhost:27017/apirest-users');
+mongoose.connect('mongodb://localhost:27017/apirest-users', { useNewUrlParser: true });
 
 const app =  express()
 
@@ -14,4 +14,4 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/users", UserRouter);
 
-app.listen(PORT, () => {console.log("ciao")})
+app.listen(PORT, () => {console.log(`ciao sur le port ${PORT}`)})
