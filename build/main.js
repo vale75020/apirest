@@ -206,6 +206,8 @@ UserRouter.put('/:id', (req, res) => {
     _id: req.params.id
   }, {
     $set: req.body
+  }, {
+    new: true
   }, (err, result) => {
     if (err) res.send(err);
     res.json(result);
@@ -213,7 +215,7 @@ UserRouter.put('/:id', (req, res) => {
 });
 UserRouter.delete('/:id', (req, res) => {
   //users.splice(req.params.id, 1);
-  _models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].remove({
+  _models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].findOneAndDelete({
     _id: req.params.id
   }, (err, result) => {
     if (err) res.send(err);

@@ -37,7 +37,7 @@ UserRouter.post('/', (req, res) => {
 UserRouter.put('/:id', (req, res)=> {
 	/* users[req.params.id] = req.body; 
 	res.send(users[req.params.id]); */
-	User.findOneAndUpdate({_id: req.params.id}, { $set: req.body }, (err, result) => {
+	User.findOneAndUpdate({_id: req.params.id}, { $set: req.body }, {new:true}, (err, result) => {
 		if (err) res.send(err);
 		res.json(result);
 	});
@@ -45,7 +45,7 @@ UserRouter.put('/:id', (req, res)=> {
 
 UserRouter.delete('/:id', (req, res)=> {
 	//users.splice(req.params.id, 1);
-	User.remove({_id: req.params.id }, (err, result) => {
+	User.findOneAndDelete({_id: req.params.id }, (err, result) => {
 		if (err) res.send(err);
   	res.send("nothing")
 	})
