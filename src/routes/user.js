@@ -9,12 +9,16 @@ UserRouter.get('/', (req, res)=> {
 	// res.json(users);
 	User.find({}, (err, result) => {
 		if (err) res.send(err);
-		res.send(result);
+		res.json(result);
 	});	
 });
 
 UserRouter.get('/:id', (req, res)=> {
-    res.json(users[req.params.id])
+	//res.json(users[req.params.id])
+	User.find({ _id : req.params.id }, (err, result) => {
+		if (err) res.send(err);
+		res.json(result);
+	});
 });
 
 UserRouter.post('/', (req, res) => {
@@ -23,7 +27,7 @@ UserRouter.post('/', (req, res) => {
    let user = new User(req.body)
    user.save()
 		.then(result  => {
-       res.send(result)
+       res.json(result)
    })
 	.catch(err => {
 			res.send(err)
@@ -33,14 +37,18 @@ UserRouter.post('/', (req, res) => {
 UserRouter.put('/:id', (req, res)=> {
 	/* users[req.params.id] = req.body; 
 	res.send(users[req.params.id]); */
-	User.findOneAndUpdate({id: req.params.id}, { $set: req.body }, (err, result) => {
-	if (err) console.log(err)
-	
-})});
+	User.findOneAndUpdate({_id: req.params.id}, { $set: req.body }, (err, result) => {
+		if (err) res.send(err);
+		res.json(result);
+	});
+});
 
 UserRouter.delete('/:id', (req, res)=> {
-	users.splice(req.params.id, 1);
-  res.send("nothing")
+	//users.splice(req.params.id, 1);
+	User.remove({_id: req.params.id }, (err, result) => {
+		if (err) res.send(err);
+  	res.send("nothing")
+	})
 });
 
 export default UserRouter;

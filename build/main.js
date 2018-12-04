@@ -177,18 +177,24 @@ UserRouter.get('/', (req, res) => {
   // res.json(users);
   _models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].find({}, (err, result) => {
     if (err) res.send(err);
-    res.send(result);
+    res.json(result);
   });
 });
 UserRouter.get('/:id', (req, res) => {
-  res.json(users[req.params.id]);
+  //res.json(users[req.params.id])
+  _models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].find({
+    _id: req.params.id
+  }, (err, result) => {
+    if (err) res.send(err);
+    res.json(result);
+  });
 });
 UserRouter.post('/', (req, res) => {
   /*	users.push(req.body);
   	res.json(users[users.length-1]); */
   let user = new _models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"](req.body);
   user.save().then(result => {
-    res.send(result);
+    res.json(result);
   }).catch(err => {
     res.send(err);
   });
@@ -197,16 +203,22 @@ UserRouter.put('/:id', (req, res) => {
   /* users[req.params.id] = req.body; 
   res.send(users[req.params.id]); */
   _models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].findOneAndUpdate({
-    id: req.params.id
+    _id: req.params.id
   }, {
     $set: req.body
   }, (err, result) => {
-    if (err) console.log(err);
+    if (err) res.send(err);
+    res.json(result);
   });
 });
 UserRouter.delete('/:id', (req, res) => {
-  users.splice(req.params.id, 1);
-  res.send("nothing");
+  //users.splice(req.params.id, 1);
+  _models_user_model__WEBPACK_IMPORTED_MODULE_1__["default"].remove({
+    _id: req.params.id
+  }, (err, result) => {
+    if (err) res.send(err);
+    res.send("nothing");
+  });
 });
 /* harmony default export */ __webpack_exports__["default"] = (UserRouter);
 
